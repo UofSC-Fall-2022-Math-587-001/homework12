@@ -1,0 +1,54 @@
+{
+    "tests": [
+      {
+        "name": "Checking the format of the submission",
+        "setup": "",
+        "run": "file --mime-type solutions.pdf",
+        "input" : "",
+        "output": "application/pdf",
+        "comparison": "included",
+        "timeout": 5,
+        "points": 0
+      },
+      {
+        "name": "Euclidan algorithm test 1",
+        "setup": "",
+        "run": "HOME='/home/runner' go test -run 1",
+        "input" : "",
+        "output": "PASS",
+        "comparison": "included",
+        "timeout": 5,
+        "points": 1
+      },
+      {
+        "name": "Euclidan algorithm test 2",
+        "setup": "",
+        "run": "HOME='/home/runner' go test -run 2",
+        "input" : "",
+        "output": "PASS",
+        "comparison": "included",
+        "timeout": 5,
+        "points": 1
+      },
+      {
+        "name": "Euclidan algorithm test 2",
+        "setup": "",
+        "run": "HOME='/home/runner' go test -run 2",
+        "input" : "",
+        "output": "PASS",
+        "comparison": "included",
+        "timeout": 5,
+        "points": 1
+      },
+      {
+        "name": "Euclidan algorithm test 3",
+        "setup": "",
+        "run": "HOME='/home/runner' go test -run 3",
+        "input" : "",
+        "output": "PASS",
+        "comparison": "included",
+        "timeout": 5,
+        "points": 1
+      }
+    ]
+}
