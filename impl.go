@@ -2,40 +2,62 @@ package hw11
 
 import (
 	// "github.com/UofSC-Fall-2022-Math-587-001/homework11/lib"
+	"errors"
+
 	"github.com/UofSC-Fall-2022-Math-587-001/homework11/ec"
+	// "errors"
+	// "math/rand" // no for use in prod :)
 )
 
-// Check out ec/basic.go for the types and methods you have available for use 
-
-// For n >=0, computes nP on C mod N 
-func positiveMult(C ec.EllipticCurve, N ec.Modulus, n int, p ec.Point) ec.Point {
-	// Use ec.Add(C,N,-,-) to add points on C mod N 
-	return ec.Identity() 
+// A struct to represent the public data for ECDSA
+type StandardData struct {
+	Prime int
+	E ec.EllipticCurve 
+	P ec.Point 
+	Order int 
 }
 
-// Computes the minimal n such that nP = Identity() 
-func Order(C ec.EllipticCurve, N ec.Modulus, p ec.Point) int {
-	// The order of the identity is 1. For an non-identity element, 
-	// add it to itself iteratively until it = Identity() 
-	return 0 
+// Check that 
+// - E has nonzero discriminant mod p
+// - P is on E 
+// - ord is the order of P 
+func (D StandardData) Valid() error {
+	return nil 
 }
 
-// For any integer n, computes nP on C mod N  
-func Multiple(C ec.EllipticCurve, N ec.Modulus, n int, p ec.Point) ec.Point {
-	// If n >= 0, we can use positiveMult. For n < 0, we need to take (-n)(-P). 
-	return ec.Identity() 
+// PrivateKey is a type alias for int 
+type PrivateKey struct { 
+	s int
+	D StandardData
 }
 
-// ListPoints computes the points on C mod N. 
-func ListPoints(C ec.EllipticCurve, N ec.Modulus) []ec.Point {
-	// I will get you started with the identity point 
-	points := []ec.Point{ec.Identity()}
-	// Iterates over all x values and use Tonelli-Shanks to find 
-	// the roots of x^3 + a*x + b mod N 
-	return points
+// PublicKey resturns the public verification key 
+// V = sP 
+func (K PrivateKey) PublicKey() ec.Point {
+	return nil 
 }
 
-// Returns the number of points on C mod N 
-func NumberPoints(C ec.EllipticCurve, N ec.Modulus) int {
-	return len(ListPoints(C,N))
+type Signature struct{
+	s, t int 
+}
+
+// Sign the document d using the PrivateKey K 
+func (K PrivateKey) Sign(d int) Signature {
+	// 1. Get a random integer e using rand.Int() 
+	// 2. Compute e*K.D.P 
+	// 3. Set s1 = eP.X mod Order  
+	// 4. Set s2 = (d + K.s*s1) e^{-1} mod Order
+	// 5. Return (s1,s2) 
+	return Signature{0,0}
+}
+
+// Verify that the Signature is valid for the document d 
+// using the K.PublicKey()
+func (S Signature) Verify(d int, K PrivateKey) error {
+	// 1. Compute v1 = d*S.t^{-1} mod K.Order 
+	// 2. Compute v2 = S.s*S.t^{-1} mod K.Order 
+	// 3. Compute Q := v1*P + v2*K.PublicKey() 
+	// 4. Check that Q.X mod Order = S.s
+	// return nil 
+	return errors.New("Forgery")
 }

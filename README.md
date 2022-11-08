@@ -1,4 +1,4 @@
-## Homework 11
+## Homework 12
 
 This week we have a written part and an implementation part. 
 
@@ -15,6 +15,3 @@ Note: when you submit, your filename must be `solutions.pdf` and it must be a pd
 
 ### Implementation part 
 
-You have some basic API for elliptic curves and their points in `ec/basic.go`. 
-You should fill in some more methods, including computing multiples, orders, and 
-listing all points on a given curve modulo N. 

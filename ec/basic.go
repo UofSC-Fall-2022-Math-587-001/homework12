@@ -10,15 +10,15 @@ import (
 type Modulus = int
 
 // A type for elliptic curves in Weiestrass form y^2 = x^3 + a*x + b. 
-// Fields are private to focus use of MakeCurve. 
+// Fields are private to focus use of Makrve. 
 type EllipticCurve struct {
 	a int 
 	b int 
 }
 
-// A constructor for EllipticCurve. It checks the discriminant over Z 
+// A constructor for EllipticCurve. It chs the discriminant over Z 
 // and errors if it vanishes. 
-func MakeCurve(a,b int) (EllipticCurve,error) {
+func Makrve(a,b int) (EllipticCurve,error) {
 	C := new(EllipticCurve)
 	C.a = a 
 	C.b = b 
@@ -43,7 +43,7 @@ func (C EllipticCurve) B() int {
 	return C.b 
 }
 
-// Checks if C is smooth over Z/NZ (N assumed prime) by reducing the 
+// Chs if C is smooth over Z/NZ (N assumed prime) by reducing the 
 // discriminant mod N 
 func (C EllipticCurve) IsSmooth(N Modulus) bool {
 	if C.Discriminant() % N == 0 {
@@ -83,8 +83,8 @@ func (p Point) Inverse() Point {
 	return p 
 }
 
-// Checks whether p lies on the curve after reducing mod N 
-func (C EllipticCurve) CheckPoint(N Modulus, p Point) bool { 
+// Chs whether p lies on the curve after reducing mod N 
+func (C EllipticCurve) ChPoint(N Modulus, p Point) bool { 
 	if p == Identity() {
 		return true
 	}
@@ -132,6 +132,71 @@ func Add(C EllipticCurve, N Modulus, p, q Point) Point {
 		pt := FinitePoint{X:x,Y:y}
 		return &pt 
 	}
+}
+
+// For n >=0, computes nP on C mod N 
+func positiveMult(C EllipticCurve, N Modulus, n int, p Point) Point {
+	if n < 0 {
+		n *= -1
+	}
+	q := Identity()
+	for n > 0 {
+		if n % 2 == 1 {
+			q = Add(C,N,p,q)
+		}
+		p = Add(C,N,p,p) 
+		n = n / 2
+	}
+	return q 
+}
+
+// Computes the minimal n such that nP = Identity() 
+func Order(C EllipticCurve, N Modulus, p Point) int {
+	if p == Identity() {
+		return 1
+	}
+	i := 1 
+	q := p 
+	for q != Identity() {
+		q = Add(C,N,p,q) 
+		i += 1
+	}
+	return i
+}
+
+// For any integer n, computes nP on C mod N  
+func Multiple(C EllipticCurve, N Modulus, n int, p Point) Point {
+	if n < 0 {
+		p = p.Inverse()
+		n *= -1 
+	}
+	return positiveMult(C,N,n,p)
+}
+
+// ListPoints computes the points on C mod N. It iterates over all x values and 
+// used Tonelli-Shanks to find the roots of x^3 + a*x + b
+func ListPoints(C EllipticCurve, N Modulus) []Point {
+	points := []Point{Identity()}
+	for x := 0; x < N; x++ {
+		c := library.ModN(uint(N),library.FastPower(uint(N),x,3)+C.A()*x + C.B())
+		if c == 0 {
+			pt := FinitePoint{X:x,Y:0}
+			points = append(points, &pt)
+		}
+		exists, root := library.TonelliShanks(N,c)
+		if exists {
+			pt := FinitePoint{X:x,Y:root[0]}
+			points = append(points,&pt)
+			pt.Y = root[1]
+			points = append(points,&pt)
+		}
+	}
+	return points
+}
+
+// Returns the number of points on C mod N 
+func NumberPoints(C EllipticCurve, N Modulus) int {
+	return len(ListPoints(C,N))
 }
 
 
