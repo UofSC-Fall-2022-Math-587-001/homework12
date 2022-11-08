@@ -1,86 +1,137 @@
-package hw11
+package hw12
 
 import (
-	"github.com/UofSC-Fall-2022-Math-587-001/homework11/ec"
+	"github.com/UofSC-Fall-2022-Math-587-001/homework12/ec"
 	"testing"
-	// "fmt"
+	"fmt"
 )
 
 func Test1(t *testing.T) {
-	A := 2
-	B := 1
-	N := 7
+	A := 100
+	B := 101
+	N := 223
+	X := 170 
+	Y := 169 
+	s := 50 
+	d := 40 
 	C, err := ec.MakeCurve(A,B)
 	if err != nil {
 		t.Errorf("The discriminant should not be 0.\n")
 	}
-	count := NumberPoints(C,N)
-	if count != 5 {
-		t.Errorf("The number F_3-points in C is 5 but you said %d.\n",count)
+	p := &ec.FinitePoint{X:X,Y:Y}
+	fmt.Printf("P = %s\n",p) 
+	ord := ec.Order(C,N,p)
+	fmt.Printf("The order of %s is %d\n",p,ord) 
+	D := Data{N,C,p,ord}
+	K := PrivateKey{D,s}
+	V := K.PublicKey()
+	signed := K.Sign(d) 
+	checked := V.Verify(d,signed) 
+	if checked != nil {
+		t.Errorf("The signature cannot be verified\n")
 	}
 }
 
 func Test2(t *testing.T) {
-	A := 2
-	B := 0
-	N := 11
+	A := 1
+	B := 1	
+	N := 1627
+	X := 1502 
+	Y := 219 
+	s := 45 
+	d := 31 
 	C, err := ec.MakeCurve(A,B)
 	if err != nil {
 		t.Errorf("The discriminant should not be 0.\n")
 	}
-	p := &ec.FinitePoint{X:2,Y:10}
-	ord := Order(C,N,p)
-	want := 6
-	if ord != want {
-		t.Errorf("The order of %d is %d and not %d\n",p,want,ord)
+	p := &ec.FinitePoint{X:X,Y:Y}
+	fmt.Printf("P = %s\n",p) 
+	ord := ec.Order(C,N,p)
+	fmt.Printf("The order of %s is %d\n",p,ord) 
+	D := Data{N,C,p,ord}
+	K := PrivateKey{D,s}
+	V := K.PublicKey()
+	signed := K.Sign(d) 
+	checked := V.Verify(d,signed) 
+	if checked != nil {
+		t.Errorf("The signature cannot be verified\n")
 	}
 }
 
 func Test3(t *testing.T) {
-	A := 4
-	B := 7
-	N := 13
+	A := 200
+	B := 300	
+	N := 7919
+	X := 7893 
+	Y := 6660  
+	s := 1541 
+	d := 1776
 	C, err := ec.MakeCurve(A,B)
 	if err != nil {
 		t.Errorf("The discriminant should not be 0.\n")
 	}
-	p := &ec.FinitePoint{X:1,Y:8}
-	mult := 4
-	q := Multiple(C,N,mult,p)
-	r := &ec.FinitePoint{X:5,Y:10}
-	if r.X != q.X || r.Y != q.Y {
-		t.Errorf("%d*%s = %s but you said = %s",mult,p,r,q)
+	p := &ec.FinitePoint{X:X,Y:Y}
+	fmt.Printf("P = %s\n",p) 
+	ord := ec.Order(C,N,p)
+	fmt.Printf("The order of %s is %d\n",p,ord) 
+	D := Data{N,C,p,ord}
+	K := PrivateKey{D,s}
+	V := K.PublicKey()
+	signed := K.Sign(d) 
+	checked := V.Verify(d,signed) 
+	if checked != nil {
+		t.Errorf("The signature cannot be verified\n")
 	}
 }
 
 func Test4(t *testing.T) {
-	A := 4
-	B := 7
-	N := 13
+	A := 200
+	B := 300	
+	N := 7919
+	X := 7893 
+	Y := 6660  
+	s := 1541 
+	d := 1776
 	C, err := ec.MakeCurve(A,B)
 	if err != nil {
 		t.Errorf("The discriminant should not be 0.\n")
 	}
-	p := &ec.FinitePoint{X:1,Y:8}
-	mult := -4
-	q := Multiple(C,N,mult,p)
-	r := &ec.FinitePoint{X:5,Y:3}
-	if r.X != q.X || r.Y != q.Y {
-		t.Errorf("%d*%s = %s but you said = %s",mult,p,r,q)
+	p := &ec.FinitePoint{X:X,Y:Y}
+	fmt.Printf("P = %s\n",p) 
+	ord := ec.Order(C,N,p)
+	fmt.Printf("The order of %s is %d\n",p,ord) 
+	D := Data{N,C,p,ord}
+	K := PrivateKey{D,s}
+	V := K.PublicKey()
+	signed := Signature{440,440} 
+	checked := V.Verify(d,signed) 
+	if checked == nil {
+		t.Errorf("The signature should not be verified\n")
 	}
 }
 
 func Test5(t *testing.T) {
-	A := 101
-	B := 803
-	N := 8675309
+	A := 1
+	B := 1	
+	N := 1627
+	X := 1502 
+	Y := 219 
+	s := 45 
+	d := 31 
 	C, err := ec.MakeCurve(A,B)
 	if err != nil {
 		t.Errorf("The discriminant should not be 0.\n")
 	}
-	count := NumberPoints(C,N)
-	want := 8675361
-	if count != want {
-		t.Errorf("The number of points on %s is %d but you returned %d.\n",C,want,count)
+	p := &ec.FinitePoint{X:X,Y:Y}
+	fmt.Printf("P = %s\n",p) 
+	ord := ec.Order(C,N,p)
+	fmt.Printf("The order of %s is %d\n",p,ord) 
+	D := Data{N,C,p,ord}
+	K := PrivateKey{D,s}
+	V := K.PublicKey()
+	signed := Signature{234,444}
+	checked := V.Verify(d,signed) 
+	if checked == nil {
+		t.Errorf("The signature should not be verified\n")
 	}
 }

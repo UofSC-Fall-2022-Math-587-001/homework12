@@ -3,7 +3,7 @@ package ec
 import (
 	"fmt"
 	"errors"
-	"github.com/UofSC-Fall-2022-Math-587-001/homework11/lib"
+	"github.com/UofSC-Fall-2022-Math-587-001/homework12/lib"
 )
 
 // A type alias for integers when we think of it as a modulus 
@@ -18,7 +18,7 @@ type EllipticCurve struct {
 
 // A constructor for EllipticCurve. It chs the discriminant over Z 
 // and errors if it vanishes. 
-func Makrve(a,b int) (EllipticCurve,error) {
+func MakeCurve(a,b int) (EllipticCurve,error) {
 	C := new(EllipticCurve)
 	C.a = a 
 	C.b = b 
@@ -88,8 +88,8 @@ func (C EllipticCurve) ChPoint(N Modulus, p Point) bool {
 	if p == Identity() {
 		return true
 	}
-	c := library.FastPower(uint(N),p.X,3)+C.A()*p.X + C.B() 
-	if library.FastPower(uint(N),p.Y,2) == library.ModN(uint(N),c){
+	c := lib.FastPower(uint(N),p.X,3)+C.A()*p.X + C.B() 
+	if lib.FastPower(uint(N),p.Y,2) == lib.ModN(uint(N),c){
 		return true 
 	}
 	return false 
@@ -111,24 +111,24 @@ func Add(C EllipticCurve, N Modulus, p, q Point) Point {
 	} else if q == Identity() {
 		return p 
 	}
-	switch library.ModN(uint(N),p.X) == library.ModN(uint(N),q.X) {
+	switch lib.ModN(uint(N),p.X) == lib.ModN(uint(N),q.X) {
 	case true: 
-		if library.ModN(uint(N),p.Y) == library.ModN(uint(N),-q.Y) {
+		if lib.ModN(uint(N),p.Y) == lib.ModN(uint(N),-q.Y) {
 			return Identity()
 		} 
-		num := library.ModN(uint(N),3*library.FastPower(uint(N),p.X,2)+C.A())
-		denom := library.ModN(uint(N),2*p.Y) 
-		lam := library.ModN(uint(N),library.Inverse(uint(N),denom)*num)
-		x := library.ModN(uint(N),library.FastPower(uint(N),lam,2)-2*p.X)
-		y := library.ModN(uint(N), lam*(p.X-x) - p.Y) 
+		num := lib.ModN(uint(N),3*lib.FastPower(uint(N),p.X,2)+C.A())
+		denom := lib.ModN(uint(N),2*p.Y) 
+		lam := lib.ModN(uint(N),lib.Inverse(uint(N),denom)*num)
+		x := lib.ModN(uint(N),lib.FastPower(uint(N),lam,2)-2*p.X)
+		y := lib.ModN(uint(N), lam*(p.X-x) - p.Y) 
 		pt := FinitePoint{X:x,Y:y}
 		return &pt 
 	default: 
-		num := library.ModN(uint(N),q.Y - p.Y) 
-		denom := library.ModN(uint(N),q.X - p.X)
-		lam := library.ModN(uint(N),library.Inverse(uint(N),denom)*num)
-		x := library.ModN(uint(N),library.FastPower(uint(N),lam,2)-p.X-q.X) 
-		y := library.ModN(uint(N),lam*(p.X-x)-p.Y) 
+		num := lib.ModN(uint(N),q.Y - p.Y) 
+		denom := lib.ModN(uint(N),q.X - p.X)
+		lam := lib.ModN(uint(N),lib.Inverse(uint(N),denom)*num)
+		x := lib.ModN(uint(N),lib.FastPower(uint(N),lam,2)-p.X-q.X) 
+		y := lib.ModN(uint(N),lam*(p.X-x)-p.Y) 
 		pt := FinitePoint{X:x,Y:y}
 		return &pt 
 	}
@@ -178,12 +178,12 @@ func Multiple(C EllipticCurve, N Modulus, n int, p Point) Point {
 func ListPoints(C EllipticCurve, N Modulus) []Point {
 	points := []Point{Identity()}
 	for x := 0; x < N; x++ {
-		c := library.ModN(uint(N),library.FastPower(uint(N),x,3)+C.A()*x + C.B())
+		c := lib.ModN(uint(N),lib.FastPower(uint(N),x,3)+C.A()*x + C.B())
 		if c == 0 {
 			pt := FinitePoint{X:x,Y:0}
 			points = append(points, &pt)
 		}
-		exists, root := library.TonelliShanks(N,c)
+		exists, root := lib.TonelliShanks(N,c)
 		if exists {
 			pt := FinitePoint{X:x,Y:root[0]}
 			points = append(points,&pt)
