@@ -11,7 +11,7 @@
         "points": 0
       },
       {
-        "name": "Euclidan algorithm test 1",
+        "name": "ECDSA test 1",
         "setup": "",
         "run": "HOME='/home/runner' go test -run 1",
         "input" : "",
@@ -21,7 +21,7 @@
         "points": 1
       },
       {
-        "name": "Euclidan algorithm test 2",
+        "name": "ECDSA test 2",
         "setup": "",
         "run": "HOME='/home/runner' go test -run 2",
         "input" : "",
@@ -31,19 +31,29 @@
         "points": 1
       },
       {
-        "name": "Euclidan algorithm test 2",
-        "setup": "",
-        "run": "HOME='/home/runner' go test -run 2",
-        "input" : "",
-        "output": "PASS",
-        "comparison": "included",
-        "timeout": 5,
-        "points": 1
-      },
-      {
-        "name": "Euclidan algorithm test 3",
+        "name": "ECDSA test 3",
         "setup": "",
         "run": "HOME='/home/runner' go test -run 3",
+        "input" : "",
+        "output": "PASS",
+        "comparison": "included",
+        "timeout": 5,
+        "points": 1
+      },
+      {
+        "name": "ECDSA test 4",
+        "setup": "",
+        "run": "HOME='/home/runner' go test -run 4",
+        "input" : "",
+        "output": "PASS",
+        "comparison": "included",
+        "timeout": 5,
+        "points": 1
+      },
+      {
+        "name": "ECDSA test 5",
+        "setup": "",
+        "run": "HOME='/home/runner' go test -run 5",
         "input" : "",
         "output": "PASS",
         "comparison": "included",
